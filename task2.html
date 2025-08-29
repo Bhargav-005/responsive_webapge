@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Piece Fan Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: #222;
+      position: relative;
+    }
+
+    /* Background image as <img> */
+    .bg-image {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    /* Dark overlay */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: -1;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: rgba(198, 40, 40, 0.9);
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Grid Layout */
+    .container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Contact Form */
+    form {
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 3px 6px rgba(0,0,0,0.4);
+    }
+    form input, form textarea, form button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
+    form button {
+      background: #c62828;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    form button:hover {
+      background: #a10c0c;
+    }
+
+    /* To-Do List */
+    .todo {
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 3px 6px rgba(0,0,0,0.4);
+    }
+    .todo ul {
+      list-style: none;
+      padding: 0;
+    }
+    .todo li {
+      background: #ffe082;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .todo button {
+      background: #c62828;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    /* Popup */
+    .popup {
+      display: none; /* hidden by default */
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 300px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .popup-content h3 {
+      margin: 0 0 10px;
+      color: green;
+    }
+    .popup-content button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: #c62828;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .popup-content button:hover {
+      background: #a10c0c;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.8);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background image -->
+  <img src="img12.jpg" alt="One Piece Background" class="bg-image">
+  <div class="overlay"></div>
+
+  <header>
+    <h1>☠️ One Piece Fan Page ☠️</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Characters</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Contact Form -->
+    <form id="contactForm">
+      <h2>Contact Us</h2>
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+
+    <!-- To-Do List -->
+    <div class="todo">
+      <h2>Favorite Characters List</h2>
+      <input type="text" id="taskInput" placeholder="Add a character...">
+      <button onclick="addTask()">Add</button>
+      <ul id="taskList"></ul>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <h3>✅ Message Sent!</h3>
+      <p>Thanks for reaching out, we’ll get back to you soon.</p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    // Show Popup
+    function showPopup() {
+      document.getElementById("popup").style.display = "flex";
+    }
+
+    // Close Popup
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    // Form Validation
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let email = document.getElementById("email").value;
+      let name = document.getElementById("name").value;
+      if (!name || !email.includes("@")) {
+        alert("Please enter a valid name and email!");
+      } else {
+        showPopup();  // ✅ Show custom popup
+        this.reset();
+      }
+    });
+
+    // To-Do List
+    function addTask() {
+      let input = document.getElementById("taskInput");
+      let taskText = input.value.trim();
+      if (taskText === "") return;
+      
+      let li = document.createElement("li");
+      li.textContent = taskText;
+
+      let btn = document.createElement("button");
+      btn.textContent = "X";
+      btn.onclick = () => li.remove();
+
+      li.appendChild(btn);
+      document.getElementById("taskList").appendChild(li);
+
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
